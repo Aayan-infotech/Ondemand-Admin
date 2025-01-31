@@ -21,9 +21,14 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import {
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Download as DownloadIcon,
+  TwoWheeler as BikeIcon,
+} from "@mui/icons-material";
+import { RideModal } from "../Modal/RideModal";
 
 const columns = [
   { id: "imageUrl", label: "Profile Picture", minWidth: 100 },
@@ -44,6 +49,10 @@ export default function ManageDrivers() {
   const [viewOpen, setViewOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [viewAllRideModal, setViewAllRideModal] = useState({
+    isOpen: false,
+    rides: [],
+  });
 
   const handleEditOpen = (driver) => {
     setSelecteddriver(driver);
@@ -105,20 +114,33 @@ export default function ManageDrivers() {
   const handleDriverStatus = async (driverId, currentStatus) => {
     try {
       const newStatus = currentStatus === "true" ? "false" : "true";
-  
+
       const res = await axios.put(
         `http://44.196.64.110:3211/api/driver/verify/${driverId}`,
         { status: newStatus } // Send the new status in request body
       );
-  
+
       console.log("Status updated:", res.data);
-      
+
       await fetchData();
     } catch (error) {
       console.error("Error updating driver status:", error);
     }
   };
-  
+  const ViewAllRides = async (driverId) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3211/api/rideRequest/completed/driver/count/${driverId}`
+      );
+      console.log(res.data.data);
+      setViewAllRideModal({
+        isOpen: true,
+        rides: res.data.data.completedRides || [], // Ensure it's an array
+      });
+    } catch (error) {
+      console.log("Error getting data of user", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     setSelecteddriver({ ...selecteddriver, [e.target.name]: e.target.value });
@@ -135,8 +157,6 @@ export default function ManageDrivers() {
   useEffect(() => {
     fetchData();
   }, []);
-
-
 
   return (
     <>
@@ -176,8 +196,15 @@ export default function ManageDrivers() {
                     <TableCell>
                       <Switch
                         checked={driver.isVerified || false}
-                        color={driver.isVerified === "true" ? "error" : "success"}
-                        onChange={() => handleDriverVerification(driver._id,driver.isVerified)}
+                        color={
+                          driver.isVerified === "true" ? "error" : "success"
+                        }
+                        onChange={() =>
+                          handleDriverVerification(
+                            driver._id,
+                            driver.isVerified
+                          )
+                        }
                       />
                     </TableCell>
                     <TableCell>
@@ -186,7 +213,7 @@ export default function ManageDrivers() {
                         onChange={() => handleDriverStatus(driver._id)}
                       />
                     </TableCell>
-                    
+
                     <TableCell align="center">
                       <IconButton
                         color="primary"
@@ -205,6 +232,12 @@ export default function ManageDrivers() {
                         onClick={() => handleDelete(driver._id)}
                       >
                         <DeleteIcon />
+                      </IconButton>
+                      <IconButton
+                        color="primary"
+                        onClick={() => ViewAllRides(driver._id)}
+                      >
+                        <BikeIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -607,6 +640,12 @@ export default function ManageDrivers() {
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
+
+      <RideModal
+        open={viewAllRideModal.isOpen}
+        onClose={() => setViewAllRideModal({ isOpen: false, rides: [] })}
+        rides={viewAllRideModal.rides}
+      />
     </>
   );
 }

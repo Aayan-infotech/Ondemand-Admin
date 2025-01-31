@@ -7,8 +7,8 @@ import Dashboard from "./Dashboard";
 
 // Lazy load pages
 const AdminLogin = React.lazy(() => import("./Pages/Login"));
-const ManageDrivers = React.lazy(() =>import("./ProtectedPages/ManageDrivers")
-);
+const ManageDrivers = React.lazy(() =>import("./ProtectedPages/ManageDrivers"))
+const ManagePayment = React.lazy(() =>import("./ProtectedPages/ManagePayment"))
 const ManageUsers = React.lazy(() => import("./ProtectedPages/ManageUsers"));
 const ManageRides = React.lazy(() => import("./ProtectedPages/ManageRides"));
 const ManageDelivery = React.lazy(() => import("./ProtectedPages/ManageDelivery"));
@@ -74,6 +74,10 @@ function App() {
                 <Route
                   path="/manage-delivery"
                   element={<ManageDelivery />}
+                />
+                <Route
+                  path="/manage-payment"
+                  element={<ManagePayment />}
                 />
               </Route>
             </Routes>

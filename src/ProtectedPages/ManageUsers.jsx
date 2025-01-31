@@ -20,9 +20,14 @@ import {
   Box,
   Switch,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import {RideModal} from "../Modal/RideModal"
+import {
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Download as DownloadIcon,
+  TwoWheeler as BikeIcon,
+} from "@mui/icons-material";
 
 const columns = [
   { id: "imageUrl", label: "Profile Picture", minWidth: 100 },
@@ -40,6 +45,10 @@ export default function ManageUsers() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
+  const [viewAllRideModal, setViewAllRideModal] = useState({
+    isOpen: false,
+    rides: [],
+});
 
   const handleEditOpen = (user) => {
     setSelectedUser(user);
@@ -69,6 +78,19 @@ export default function ManageUsers() {
       console.log("Error updating user", error);
     }
   };
+  const ViewAllRides = async (userId) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3211/api/rideRequest/completed/user/count/${userId}` );
+        console.log(res.data.data.completedRides)
+        setViewAllRideModal({
+          isOpen: true,
+          rides: res.data.data.completedRides || [], // Ensure it's an array
+      });
+    } catch (error) {
+      console.log("Error getting data of user", error);
+    }
+  };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
@@ -85,7 +107,7 @@ export default function ManageUsers() {
     setSelectedUser({ ...selectedUser, [e.target.name]: e.target.value });
   };
   const handleUserStatus = (userId) => {
-    console.log(userId)
+    console.log(userId);
   };
 
   useEffect(() => {
@@ -134,7 +156,7 @@ export default function ManageUsers() {
                     <TableCell>{user.mobileNumber}</TableCell>
                     <TableCell>
                       <Switch
-                        checked={ false}
+                        checked={false}
                         onChange={() => handleUserStatus(user._id)}
                       />
                     </TableCell>
@@ -156,6 +178,12 @@ export default function ManageUsers() {
                         onClick={() => handleDelete(user._id)}
                       >
                         <DeleteIcon />
+                      </IconButton>
+                      <IconButton
+                        color="primary"
+                        onClick={() => ViewAllRides(user._id)}
+                      >
+                        <BikeIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -264,6 +292,12 @@ export default function ManageUsers() {
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
+      <RideModal
+        open={viewAllRideModal.isOpen} 
+        onClose={() => setViewAllRideModal({ isOpen: false, rides: [] })} 
+        rides={viewAllRideModal.rides} 
+      />
+
     </>
   );
 }

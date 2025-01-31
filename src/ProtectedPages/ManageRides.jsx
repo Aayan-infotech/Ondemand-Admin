@@ -27,20 +27,20 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Download as DownloadIcon,
+  TwoWheeler as BikeIcon 
 } from "@mui/icons-material";
 import { generatePDF } from "../utils/rideDetailsPdf";
 
 const columns = [
-  { id: "driverId", label: " Driver Id", minWidth: 170, align: "center" },
-  { id: "userId", label: "userId", minWidth: 100, align: "center" },
-  { id: "vehicleId", label: "E-vehicle Id", minWidth: 170, align: "center" },
-  { id: "status", label: "status", minWidth: 170, align: "center" },
-  { id: "finalFare", label: "finalFare", minWidth: 170, align: "center" },
+  { id: "Driver", label: " Driver", minWidth: 150, align: "center" },
+  { id: "User", label: "user Name", minWidth: 100, align: "center" },
+  { id: "status", label: "status", minWidth: 150, align: "left" },
+  { id: "finalFare", label: "finalFare", minWidth: 150, align: "left" },
   {
     id: "paymentStatus",
     label: "Payment Status",
-    minWidth: 170,
-    align: "center",
+    minWidth: 150,
+    align: "left",
   },
   { id: "action", label: "Action", minWidth: 200, align: "center" },
 ];
@@ -119,7 +119,7 @@ const ManageRides = () => {
       const res = await axios.get(
         "http://44.196.64.110:3211/api/rideRequest/getAll/rides"
       );
-      console.log(res.data.data.rides);
+      console.log(res.data.data);
       setrides(res.data.data.rides);
     } catch (error) {
       console.log(error);
@@ -148,9 +148,8 @@ const ManageRides = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((ride) => (
                   <TableRow hover key={ride._id}>
-                    <TableCell>{ride.driverId}</TableCell>
-                    <TableCell>{ride.userId}</TableCell>
-                    <TableCell>{ride.vehicleId}</TableCell>
+                    <TableCell sx={{textAlign:"center"}}>{ride.driverId.name}</TableCell>
+                    <TableCell sx={{textAlign:"center"}}>{ride.userId.name}</TableCell>
                     <TableCell>{ride.status}</TableCell>
                     <TableCell>{ride.finalFare}</TableCell>
                     <TableCell>{ride.paymentStatus}</TableCell>
@@ -161,18 +160,19 @@ const ManageRides = () => {
                       >
                         <VisibilityIcon />
                       </IconButton>
-                      <IconButton
+                      {/* <IconButton
                         color="primary"
                         onClick={() => handleEditOpen(ride)}
                       >
                         <EditIcon />
-                      </IconButton>
-                      <IconButton
+                      </IconButton> */}
+                     
+                      {/* <IconButton
                         color="error"
                         onClick={() => handleDelete(ride._id)}
                       >
                         <DeleteIcon />
-                      </IconButton>
+                      </IconButton> */}
                       {getInfoLoader ? (
                         <CircularProgress size={24} />
                       ) : (
@@ -180,7 +180,7 @@ const ManageRides = () => {
                           color="secondary"
                             onClick={()=>getRideDetailedInfo(ride._id)}
                         >
-                          <DownloadIcon />
+                          <DownloadIcon  />
                         </Button>
                       )}
                     </TableCell>

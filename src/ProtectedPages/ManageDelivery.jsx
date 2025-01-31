@@ -20,21 +20,26 @@ import {
   Box,
   Switch,
   Typography,
+  CircularProgress,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import {
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Download as DownloadIcon,
+} from "@mui/icons-material";
+import { generatePDF } from "../utils/rideDetailsPdf";
 
 const columns = [
-  { id: "driverId", label: " Driver Id", minWidth: 150, align: "center" },
-  { id: "userId", label: "userId", minWidth: 100, align: "center" },
-  { id: "status", label: "status", minWidth: 150, align: "center" },
-  { id: "finalFare", label: "finalFare", minWidth: 150, align: "center" },
+  { id: "driverId", label: " Driver Id", minWidth: 150, align: "left" },
+  { id: "userId", label: "userId", minWidth: 100, align: "left" },
+  { id: "status", label: "status", minWidth: 150, align: "left" },
+  { id: "finalFare", label: "finalFare", minWidth: 150, align: "left" },
   {
     id: "paymentStatus",
     label: "Payment Status",
     minWidth: 170,
-    align: "center",
+    align: "left",
   },
   { id: "action", label: "Action", minWidth: 200, align: "center" },
 ];
@@ -45,6 +50,7 @@ const ManageDelivery = () => {
   const [selectedride, setSelectedride] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
+    const [getInfoLoader, setgetInfoLoader] = useState(false);
 
   const handleEditOpen = (ride) => {
     setSelectedride(ride);
@@ -61,6 +67,23 @@ const ManageDelivery = () => {
     setEditOpen(false);
     setViewOpen(false);
     setSelectedride(null);
+  };
+  const getRideDetailedInfo = async (id) => {
+    setgetInfoLoader(true);
+    try {
+      const response = await axios.get(`http://localhost:3211/api/admin/details/${id}`);
+      const ride = response.data.data; // Extract ride data
+  
+      console.log(ride);
+      setgetInfoLoader(false);
+  
+      // Generate PDF once data is available
+      generatePDF(ride);
+  
+    } catch (error) {
+      setgetInfoLoader(false);
+      console.log("Error fetching ride details", error);
+    }
   };
 
   const handleEditSubmit = async () => {
@@ -136,18 +159,28 @@ const ManageDelivery = () => {
                       >
                         <VisibilityIcon />
                       </IconButton>
-                      <IconButton
+                      {/* <IconButton
                         color="primary"
                         onClick={() => handleEditOpen(ride)}
                       >
                         <EditIcon />
-                      </IconButton>
+                      </IconButton> */}
                       <IconButton
                         color="error"
                         onClick={() => handleDelete(ride._id)}
                       >
                         <DeleteIcon />
                       </IconButton>
+                       {getInfoLoader ? (
+                                              <CircularProgress size={24} />
+                                            ) : (
+                                              <Button
+                                                color="secondary"
+                                                  onClick={()=>getRideDetailedInfo(ride._id)}
+                                              >
+                                                <DownloadIcon />
+                                              </Button>
+                                            )}
                     </TableCell>
                   </TableRow>
                 ))}
