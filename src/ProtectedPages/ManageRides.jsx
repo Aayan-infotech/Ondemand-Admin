@@ -32,10 +32,10 @@ import {
 import { generatePDF } from "../utils/rideDetailsPdf";
 
 const columns = [
-  { id: "Ride Id", label: " Driver Id", minWidth: 150, align: "center" },
-  { id: "userId", label: "userId", minWidth: 100, align: "center" },
-  { id: "status", label: "status", minWidth: 150, align: "center" },
-  { id: "finalFare", label: "finalFare", minWidth: 150, align: "center" },
+  { id: "Driver", label: " Driver", minWidth: 150, align: "center" },
+  { id: "User", label: "user Name", minWidth: 100, align: "center" },
+  { id: "status", label: "status", minWidth: 150, align: "left" },
+  { id: "finalFare", label: "finalFare", minWidth: 150, align: "left" },
   {
     id: "paymentStatus",
     label: "Payment Status",
@@ -119,7 +119,7 @@ const ManageRides = () => {
       const res = await axios.get(
         "http://44.196.64.110:3211/api/rideRequest/getAll/rides"
       );
-      console.log(res.data.data.rides);
+      console.log(res.data.data);
       setrides(res.data.data.rides);
     } catch (error) {
       console.log(error);
@@ -148,8 +148,8 @@ const ManageRides = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((ride) => (
                   <TableRow hover key={ride._id}>
-                    <TableCell>{ride._id}</TableCell>
-                    <TableCell>{ride.userId}</TableCell>
+                    <TableCell sx={{textAlign:"center"}}>{ride.driverId.name}</TableCell>
+                    <TableCell sx={{textAlign:"center"}}>{ride.userId.name}</TableCell>
                     <TableCell>{ride.status}</TableCell>
                     <TableCell>{ride.finalFare}</TableCell>
                     <TableCell>{ride.paymentStatus}</TableCell>

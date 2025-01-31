@@ -9,7 +9,7 @@ import { Modal, Box, Typography, Table, TableHead, TableRow, TableCell, TableBod
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Ride ID</TableCell>
+                            <TableCell sx={{textAlign:"center"}}>S. No.</TableCell>
                             <TableCell>Status</TableCell>
                             <TableCell>Payment Status</TableCell>
                             <TableCell>Date</TableCell>
@@ -17,9 +17,9 @@ import { Modal, Box, Typography, Table, TableHead, TableRow, TableCell, TableBod
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rides.map((ride) => (
+                        {rides.map((ride,index) => (
                             <TableRow key={ride._id}>
-                                <TableCell>{ride._id}</TableCell>
+                                <TableCell sx={{textAlign:"center"}}>{index+1}</TableCell>
                                 <TableCell>{ride.status}</TableCell>
                                 <TableCell>{ride.paymentStatus}</TableCell>
                                 <TableCell>{new Date(ride.createdAt).toLocaleString()}</TableCell>
