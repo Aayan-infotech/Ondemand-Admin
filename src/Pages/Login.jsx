@@ -54,7 +54,7 @@ const Login = ({setIsAuthenticated}) => {
 
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:3211/api/admin/login", formData);
+      const response = await axios.post("http://44.196.64.110:3211/api/admin/login", formData);
       localStorage.setItem("token", response.data.token);
       setIsAuthenticated(true)
       navigate("/");

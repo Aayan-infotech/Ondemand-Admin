@@ -91,7 +91,7 @@ const handleSearchChange = (e) => {
   const ViewAllRides = async (userId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3211/api/rideRequest/completed/user/count/${userId}` );
+        `http://44.196.64.110:3211/api/rideRequest/completed/user/count/${userId}` );
         console.log(res.data.data.completedRides)
         setViewAllRideModal({
           isOpen: true,

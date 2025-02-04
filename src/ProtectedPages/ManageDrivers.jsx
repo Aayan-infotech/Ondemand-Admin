@@ -137,7 +137,7 @@ export default function ManageDrivers() {
   const ViewAllRides = async (driverId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3211/api/rideRequest/completed/driver/count/${driverId}`
+        `http://44.196.64.110:3211/api/rideRequest/completed/driver/count/${driverId}`
       );
       console.log(res.data.data);
       setViewAllRideModal({
