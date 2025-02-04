@@ -27,6 +27,7 @@ import {
   Delete as DeleteIcon,
   Download as DownloadIcon,
   TwoWheeler as BikeIcon,
+  Search as SearchIcon,
 } from "@mui/icons-material";
 
 const columns = [
@@ -44,11 +45,20 @@ export default function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(""); 
   const [viewOpen, setViewOpen] = useState(false);
   const [viewAllRideModal, setViewAllRideModal] = useState({
     isOpen: false,
     rides: [],
 });
+
+const filteredUsers = users.filter((user) =>
+  user.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
+const handleSearchChange = (e) => {
+  setSearchQuery(e.target.value);
+};
+
 
   const handleEditOpen = (user) => {
     setSelectedUser(user);
@@ -93,7 +103,6 @@ export default function ManageUsers() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
       await axios.delete(`http://44.196.64.110:3211/api/user/${id}`);
@@ -106,8 +115,13 @@ export default function ManageUsers() {
   const handleInputChange = (e) => {
     setSelectedUser({ ...selectedUser, [e.target.name]: e.target.value });
   };
-  const handleUserStatus = (userId) => {
-    console.log(userId);
+  const handleUserStatus =async (userId) => {
+    try {
+      await axios.put(`http://44.196.64.110:3211/api/user/updateStatus/${userId}`);
+      fetchData();
+    } catch (error) {
+      console.log("Error updating user status", error);
+    }
   };
 
   useEffect(() => {
@@ -126,7 +140,27 @@ export default function ManageUsers() {
 
   return (
     <>
-      <Box sx={{ fontSize: "24px", textAlign: "center" }}>User Management</Box>
+    <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Box sx={{ fontSize: "24px" }}>user Management</Box>
+            <TextField
+              label="Search by Name"
+              variant="outlined"
+              size="small"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              sx={{ width: 300 }}
+              InputProps={{
+                endAdornment: <SearchIcon />,
+              }}
+            />
+          </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader>
@@ -140,7 +174,7 @@ export default function ManageUsers() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users
+              {filteredUsers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user) => (
                   <TableRow hover key={user._id}>
@@ -156,7 +190,7 @@ export default function ManageUsers() {
                     <TableCell>{user.mobileNumber}</TableCell>
                     <TableCell>
                       <Switch
-                        checked={false}
+                        checked={user.userStatus==="Active"?true:false}
                         onChange={() => handleUserStatus(user._id)}
                       />
                     </TableCell>

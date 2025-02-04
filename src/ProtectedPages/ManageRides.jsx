@@ -96,7 +96,7 @@ const ManageRides = () => {
  const getRideDetailedInfo = async (id) => {
    setgetInfoLoader(true);
    try {
-     const response = await axios.get(`http://localhost:3211/api/admin/details/${id}`);
+     const response = await axios.get(`http://44.196.64.110:3211/api/admin/details/${id}`);
      const ride = response.data.data; // Extract ride data
  
      console.log(ride);
@@ -371,13 +371,13 @@ const ManageRides = () => {
                     <TableCell>
                       <strong>Driver ID</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.driverId || "N/A"}</TableCell>
+                    <TableCell>{selectedride?.driverId.name || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
                       <strong>User ID</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.userId || "N/A"}</TableCell>
+                    <TableCell>{selectedride?.userId.name || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
