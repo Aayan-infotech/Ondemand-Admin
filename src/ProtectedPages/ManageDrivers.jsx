@@ -27,6 +27,8 @@ import {
   Delete as DeleteIcon,
   Download as DownloadIcon,
   TwoWheeler as BikeIcon,
+  ShoppingBag as BagIcon,
+  Search as SearchIcon,
 } from "@mui/icons-material";
 import { RideModal } from "../Modal/RideModal";
 
@@ -48,6 +50,7 @@ export default function ManageDrivers() {
   const [editOpen, setEditOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [viewAllRideModal, setViewAllRideModal] = useState({
     isOpen: false,
@@ -74,6 +77,14 @@ export default function ManageDrivers() {
     setViewOpen(false);
     setOpen(false);
     setSelecteddriver(null);
+  };
+
+  const filteredDrivers = drivers.filter((driver) =>
+    driver.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleEditSubmit = async () => {
@@ -111,17 +122,13 @@ export default function ManageDrivers() {
       console.log(error);
     }
   };
-  const handleDriverStatus = async (driverId, currentStatus) => {
+  const handleDriverStatus = async (driverId) => {
     try {
-      const newStatus = currentStatus === "true" ? "false" : "true";
-
+      console.log(driverId);
       const res = await axios.put(
-        `http://44.196.64.110:3211/api/driver/verify/${driverId}`,
-        { status: newStatus } // Send the new status in request body
+        `http://44.196.64.110:3211/api/driver/updateStatus/${driverId}`
       );
-
-      console.log("Status updated:", res.data);
-
+      console.log(res);
       await fetchData();
     } catch (error) {
       console.error("Error updating driver status:", error);
@@ -141,6 +148,23 @@ export default function ManageDrivers() {
       console.log("Error getting data of user", error);
     }
   };
+  const ViewAllDeliveryBydriver = async (driverId) => {
+    try {
+      const res = await axios.get(
+        `http://44.196.64.110:3211/api/deliveryRequest/completed/deliveries/${driverId}/count`
+      );
+      console.log(res.data.data?.completedDeliveries);
+      setViewAllRideModal({
+        isOpen: true,
+        rides:
+          res.data.data.completedRides ||
+          res.data.data?.completedDeliveries ||
+          [], // Ensure it's an array
+      });
+    } catch (error) {
+      console.log("Error getting data of user", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     setSelecteddriver({ ...selecteddriver, [e.target.name]: e.target.value });
@@ -148,7 +172,7 @@ export default function ManageDrivers() {
   const fetchData = async () => {
     try {
       const res = await axios.get("http://44.196.64.110:3211/api/driver/");
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setdrivers(res?.data.data);
     } catch (error) {
       console.log(error);
@@ -160,9 +184,28 @@ export default function ManageDrivers() {
 
   return (
     <>
-      <Box sx={{ fontSize: "24px", textAlign: "center" }}>
-        Driver Management
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Box sx={{ fontSize: "24px" }}>Driver Management</Box>
+        <TextField
+          label="Search by Name"
+          variant="outlined"
+          size="small"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          sx={{ width: 300 }}
+          InputProps={{
+            endAdornment: <SearchIcon />,
+          }}
+        />
       </Box>
+
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader>
@@ -176,7 +219,7 @@ export default function ManageDrivers() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {drivers
+              {filteredDrivers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((driver) => (
                   <TableRow hover key={driver._id}>
@@ -195,6 +238,14 @@ export default function ManageDrivers() {
                     <TableCell>{driver.mobileNumber}</TableCell>
                     <TableCell>
                       <Switch
+                        checked={
+                          driver.driverStatus === "Active" ? true : false
+                        }
+                        onChange={() => handleDriverStatus(driver._id)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Switch
                         checked={driver.isVerified || false}
                         color={
                           driver.isVerified === "true" ? "error" : "success"
@@ -205,12 +256,6 @@ export default function ManageDrivers() {
                             driver.isVerified
                           )
                         }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Switch
-                        checked={driver.isVerified || false}
-                        onChange={() => handleDriverStatus(driver._id)}
                       />
                     </TableCell>
 
@@ -233,11 +278,18 @@ export default function ManageDrivers() {
                       >
                         <DeleteIcon />
                       </IconButton>
+                      <br />
                       <IconButton
                         color="primary"
                         onClick={() => ViewAllRides(driver._id)}
                       >
                         <BikeIcon />
+                      </IconButton>
+                      <IconButton
+                        color="primary"
+                        onClick={() => ViewAllDeliveryBydriver(driver._id)}
+                      >
+                        <BagIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>

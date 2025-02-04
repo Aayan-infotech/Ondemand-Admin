@@ -1,53 +1,52 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
-
-
-const generatePDF = (ride) => {
+const deliveryDetailsPdf = (ride) => {
   const doc = new jsPDF();
 
   // **HEADER**
   doc.setFont("helvetica", "bold");
   doc.setFontSize(20);
-  doc.text("On-Demand Ride Details", 70, 20);
-  
+  doc.text("Delivery Details Report", 70, 20);
+
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
-  doc.text(`Ride ID: ${ride._id}`, 15, 30);
+  doc.text(`Ride ID: ${ride._id || "N/A"}`, 15, 30);
   doc.text(`Date: ${new Date().toLocaleString()}`, 140, 30);
 
   doc.setLineWidth(0.5);
   doc.line(15, 35, 195, 35); // Horizontal Line
 
-  // **USER DETAILS**
+  // **RIDE DETAILS**
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("User Details", 15, 45);
-  
+  doc.text("Delivery Information", 15, 45);
+
   doc.autoTable({
     startY: 50,
     theme: "grid",
     head: [["Field", "Details"]],
     body: [
-      ["Name", ride.userId?.name || "N/A"],
-      ["Email", ride.userId?.email || "N/A"],
-      ["Mobile", ride.userId?.mobileNumber || "N/A"]
+      ["Status", ride.status || "N/A"],
+      ["Final Fare", `₹${ride.finalFare || "0.00"}`],
+      ["Payment Status", ride.paymentStatus || "N/A"],
+      ["Created At", new Date(ride.createdAt).toLocaleString() || "N/A"],
+      ["Updated At", new Date(ride.updatedAt).toLocaleString() || "N/A"]
     ]
   });
 
-  // **DRIVER DETAILS**
+  // **USER & DRIVER DETAILS (Condensed)**
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Driver Details", 15, doc.autoTable.previous.finalY + 10);
+  doc.text("User & Driver Details", 15, doc.autoTable.previous.finalY + 10);
 
   doc.autoTable({
     startY: doc.autoTable.previous.finalY + 15,
     theme: "grid",
-    head: [["Field", "Details"]],
+    head: [["Field", "User", "Driver"]],
     body: [
-      ["Name", ride.driverId?.name || "N/A"],
-      ["Email", ride.driverId?.email || "N/A"],
-      ["Mobile", ride.driverId?.mobileNumber || "N/A"]
+      ["Name", ride.userId?.name || "N/A", ride.driverId?.name || "N/A"],
+      ["Mobile", ride.userId?.mobileNumber || "N/A", ride.driverId?.mobileNumber || "N/A"]
     ]
   });
 
@@ -61,35 +60,13 @@ const generatePDF = (ride) => {
     theme: "grid",
     head: [["Field", "Details"]],
     body: [
-      ["Model", ride.vehicleId?.model || "N/A"],
-      ["Vehicle Number", ride.vehicleId?.vehicleNumber || "N/A"],
-      ["Type", ride.vehicleId?.type || "N/A"]
+      ["Type", ride.vehicleId?.type || "N/A"],
+      ["Vehicle Number", ride.vehicleId?.vehicleNumber || "N/A"]
     ]
   });
 
-  // **RIDE DETAILS**
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Ride Details", 15, doc.autoTable.previous.finalY + 10);
-
-  doc.autoTable({
-    startY: doc.autoTable.previous.finalY + 15,
-    theme: "grid",
-    head: [["Field", "Details"]],
-    body: [
-      ["Pickup Location", `Lat: ${ride.pickupLocation.coordinates[1]}, Long: ${ride.pickupLocation.coordinates[0]}`],
-      ["Dropoff Location", `Lat: ${ride.dropoffLocation.coordinates[1]}, Long: ${ride.dropoffLocation.coordinates[0]}`],
-      ["Final Fare", `₹${ride.finalFare}`],
-      ["Payment Status", ride.paymentStatus],
-      ["Ride Status", ride.status],
-      ["Created At", new Date(ride.createdAt).toLocaleString()],
-      ["Updated At", new Date(ride.updatedAt).toLocaleString()],
-      ["OTP", ride.otp || "N/A"]
-    ]
-  });
-
-  // Save the PDF
-  doc.save(`Ride_${ride._id}.pdf`);
+  // **Save the PDF**
+  doc.save(`Ride_${ride._id || "Unknown"}.pdf`);
 };
 
-export {generatePDF}
+export { deliveryDetailsPdf };

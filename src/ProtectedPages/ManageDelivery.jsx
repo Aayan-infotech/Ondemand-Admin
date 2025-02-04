@@ -28,7 +28,7 @@ import {
   Delete as DeleteIcon,
   Download as DownloadIcon,
 } from "@mui/icons-material";
-import { generatePDF } from "../utils/rideDetailsPdf";
+import { deliveryDetailsPdf } from "../utils/deliverydetailsPdf";
 
 const columns = [
   { id: "driverId", label: " Driver Id", minWidth: 150, align: "left" },
@@ -71,14 +71,14 @@ const ManageDelivery = () => {
   const getRideDetailedInfo = async (id) => {
     setgetInfoLoader(true);
     try {
-      const response = await axios.get(`http://localhost:3211/api/admin/details/${id}`);
+      const response = await axios.get(`http://44.196.64.110:3211/api/deliveryRequest/deliveryStatus/${id}`);
       const ride = response.data.data; // Extract ride data
   
       console.log(ride);
       setgetInfoLoader(false);
   
       // Generate PDF once data is available
-      generatePDF(ride);
+      deliveryDetailsPdf(ride);
   
     } catch (error) {
       setgetInfoLoader(false);
@@ -99,16 +99,16 @@ const ManageDelivery = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this ride?")) return;
+  // const handleDelete = async (id) => {
+  //   if (!window.confirm("Are you sure you want to delete this ride?")) return;
 
-    try {
-      await axios.delete(`http://44.196.64.110:3211/api/ride/${id}`);
-      setDelivery(delivery.filter((ride) => ride._id !== id));
-    } catch (error) {
-      console.log("Error deleting ride", error);
-    }
-  };
+  //   try {
+  //     await axios.delete(`http://44.196.64.110:3211/api/ride/${id}`);
+  //     setDelivery(delivery.filter((ride) => ride._id !== id));
+  //   } catch (error) {
+  //     console.log("Error deleting ride", error);
+  //   }
+  // };
 
   const handleInputChange = (e) => {
     setSelectedride({ ...selectedride, [e.target.name]: e.target.value });
@@ -118,7 +118,6 @@ const ManageDelivery = () => {
       const res = await axios.get(
         "http://44.196.64.110:3211/api/deliveryRequest/getAll/deliveries"
       );
-      console.log(res.data.data.delivery[0]);
       setDelivery(res.data.data.delivery);
     } catch (error) {
       console.log(error);
@@ -147,8 +146,8 @@ const ManageDelivery = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((ride) => (
                   <TableRow hover key={ride._id}>
-                    <TableCell>{ride.driverId}</TableCell>
-                    <TableCell>{ride.userId}</TableCell>
+                    <TableCell>{ride.driverId.name}</TableCell>
+                    <TableCell>{ride.userId.name}</TableCell>
                     <TableCell>{ride.status}</TableCell>
                     <TableCell>{ride.finalFare}</TableCell>
                     <TableCell>{ride.paymentStatus}</TableCell>
@@ -165,12 +164,7 @@ const ManageDelivery = () => {
                       >
                         <EditIcon />
                       </IconButton> */}
-                      <IconButton
-                        color="error"
-                        onClick={() => handleDelete(ride._id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      
                        {getInfoLoader ? (
                                               <CircularProgress size={24} />
                                             ) : (

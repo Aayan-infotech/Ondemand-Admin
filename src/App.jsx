@@ -8,10 +8,10 @@ import Dashboard from "./Dashboard";
 // Lazy load pages
 const AdminLogin = React.lazy(() => import("./Pages/Login"));
 const ManageDrivers = React.lazy(() =>import("./ProtectedPages/ManageDrivers"))
-const ManagePayment = React.lazy(() =>import("./ProtectedPages/ManagePayment"))
 const ManageUsers = React.lazy(() => import("./ProtectedPages/ManageUsers"));
 const ManageRides = React.lazy(() => import("./ProtectedPages/ManageRides"));
 const ManageDelivery = React.lazy(() => import("./ProtectedPages/ManageDelivery"));
+const ManageContent = React.lazy(() => import("./ProtectedPages/ManageContent"));
 
 // Context for theme toggling and authentication
 export const ColorModeContext = createContext();
@@ -76,8 +76,8 @@ function App() {
                   element={<ManageDelivery />}
                 />
                 <Route
-                  path="/manage-payment"
-                  element={<ManagePayment />}
+                  path="/manage-content"
+                  element={<ManageContent />}
                 />
               </Route>
             </Routes>
