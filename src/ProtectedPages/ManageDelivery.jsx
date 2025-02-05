@@ -31,15 +31,15 @@ import {
 import { deliveryDetailsPdf } from "../utils/deliverydetailsPdf";
 
 const columns = [
-  { id: "driverId", label: " Driver Id", minWidth: 150, align: "left" },
-  { id: "userId", label: "userId", minWidth: 100, align: "left" },
+  { id: "driverId", label: "Driver Name", minWidth: 150, align: "left" },
+  { id: "userId", label: "User Name", minWidth: 100, align: "center" },
   { id: "status", label: "Delivery status", minWidth: 150, align: "left" },
-  { id: "finalFare", label: "finalFare", minWidth: 150, align: "left" },
+  { id: "finalFare", label: "Final Fare", minWidth: 150, align: "left" },
   {
     id: "paymentStatus",
     label: "Payment Status",
     minWidth: 170,
-    align: "left",
+    align: "center",
   },
   { id: "action", label: "Action", minWidth: 200, align: "center" },
 ];
@@ -204,10 +204,10 @@ const ManageDelivery = () => {
                   ?.map((ride) => (
                     <TableRow hover key={ride._id}>
                       <TableCell>{ride.driverId.name}</TableCell>
-                      <TableCell>{ride.userId.name}</TableCell>
+                      <TableCell sx={{textAlign:"center"}}>{ride.userId.name}</TableCell>
                       <TableCell>{ride.status}</TableCell>
                       <TableCell>{ride.finalFare}</TableCell>
-                      <TableCell>{ride.paymentStatus}</TableCell>
+                      <TableCell sx={{textAlign:"center"}}>{ride.paymentStatus}</TableCell>
                       <TableCell align="center">
                         <IconButton
                           color="primary"
