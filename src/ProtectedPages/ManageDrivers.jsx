@@ -137,7 +137,7 @@ export default function ManageDrivers() {
   const ViewAllRides = async (driverId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3211/api/rideRequest/completed/driver/count/${driverId}`
+        `http://44.196.64.110:3211/api/rideRequest/completed/driver/count/${driverId}`
       );
       console.log(res.data.data);
       setViewAllRideModal({
@@ -193,7 +193,7 @@ export default function ManageDrivers() {
         }}
       >
         <Box sx={{ fontSize: "24px" }}>Driver Management</Box>
-        <TextField
+        {/* <TextField
           label="Search by Name"
           variant="outlined"
           size="small"
@@ -203,7 +203,7 @@ export default function ManageDrivers() {
           InputProps={{
             endAdornment: <SearchIcon />,
           }}
-        />
+        /> */}
       </Box>
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>

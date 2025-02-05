@@ -91,7 +91,7 @@ const handleSearchChange = (e) => {
   const ViewAllRides = async (userId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3211/api/rideRequest/completed/user/count/${userId}` );
+        `http://44.196.64.110:3211/api/rideRequest/completed/user/count/${userId}` );
         console.log(res.data.data.completedRides)
         setViewAllRideModal({
           isOpen: true,
@@ -149,7 +149,7 @@ const handleSearchChange = (e) => {
             }}
           >
             <Box sx={{ fontSize: "24px" }}>user Management</Box>
-            <TextField
+            {/* <TextField
               label="Search by Name"
               variant="outlined"
               size="small"
@@ -159,7 +159,7 @@ const handleSearchChange = (e) => {
               InputProps={{
                 endAdornment: <SearchIcon />,
               }}
-            />
+            /> */}
           </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
