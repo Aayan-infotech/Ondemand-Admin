@@ -33,7 +33,7 @@ import { deliveryDetailsPdf } from "../utils/deliverydetailsPdf";
 const columns = [
   { id: "driverId", label: " Driver Id", minWidth: 150, align: "left" },
   { id: "userId", label: "userId", minWidth: 100, align: "left" },
-  { id: "status", label: "status", minWidth: 150, align: "left" },
+  { id: "status", label: "Delivery status", minWidth: 150, align: "left" },
   { id: "finalFare", label: "finalFare", minWidth: 150, align: "left" },
   {
     id: "paymentStatus",
@@ -50,7 +50,9 @@ const ManageDelivery = () => {
   const [selectedride, setSelectedride] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
-    const [getInfoLoader, setgetInfoLoader] = useState(false);
+  const [getInfoLoader, setgetInfoLoader] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("");
 
   const handleEditOpen = (ride) => {
     setSelectedride(ride);
@@ -71,15 +73,16 @@ const ManageDelivery = () => {
   const getRideDetailedInfo = async (id) => {
     setgetInfoLoader(true);
     try {
-      const response = await axios.get(`http://44.196.64.110:3211/api/deliveryRequest/deliveryStatus/${id}`);
+      const response = await axios.get(
+        `http://44.196.64.110:3211/api/deliveryRequest/deliveryStatus/${id}`
+      );
       const ride = response.data.data; // Extract ride data
-  
+
       console.log(ride);
       setgetInfoLoader(false);
-  
+
       // Generate PDF once data is available
       deliveryDetailsPdf(ride);
-  
     } catch (error) {
       setgetInfoLoader(false);
       console.log("Error fetching ride details", error);
@@ -126,9 +129,58 @@ const ManageDelivery = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredDeliveries = delivery.filter((ride) => {
+    return (
+      (statusFilter ? ride.status === statusFilter : true) &&
+      (paymentStatusFilter ? ride.paymentStatus === paymentStatusFilter : true)
+    );
+  });
+
   return (
     <>
-      <Box sx={{ fontSize: "24px", textAlign: "center" }}>Delivery Management</Box>
+      <Box sx={{ fontSize: "24px", textAlign: "center" }}>
+        Delivery Management
+      </Box>
+      <Box sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
+        {/* Status Filter */}
+        <TextField
+          select
+          label="Filter by Status"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          SelectProps={{ native: true }}
+        >
+          <option value=""></option>
+          <option value="completed">Completed</option>
+          <option value="canceled_by_system">Canceled by System</option>
+        </TextField>
+
+        {/* Payment Status Filter */}
+        <TextField
+          select
+          label="Filter by Payment Status"
+          value={paymentStatusFilter}
+          onChange={(e) => setPaymentStatusFilter(e.target.value)}
+          SelectProps={{ native: true }}
+        >
+          <option value=""></option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+        </TextField>
+
+        {/* Clear Filters Button */}
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setStatusFilter("");
+            setPaymentStatusFilter("");
+          }}
+        >
+          Clear Filters
+        </Button>
+      </Box>
+
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader>
@@ -142,42 +194,48 @@ const ManageDelivery = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {delivery.length<1?<Box sx={{ fontSize: "24px", textAlign: "center" }}>No Deliveries Found</Box>:delivery
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                ?.map((ride) => (
-                  <TableRow hover key={ride._id}>
-                    <TableCell>{ride.driverId.name}</TableCell>
-                    <TableCell>{ride.userId.name}</TableCell>
-                    <TableCell>{ride.status}</TableCell>
-                    <TableCell>{ride.finalFare}</TableCell>
-                    <TableCell>{ride.paymentStatus}</TableCell>
-                    <TableCell align="center">
-                      <IconButton
-                        color="primary"
-                        onClick={() => handleViewOpen(ride)}
-                      >
-                        <VisibilityIcon />
-                      </IconButton>
-                      {/* <IconButton
+              {filteredDeliveries.length < 1 ? (
+                <Box sx={{ fontSize: "24px", textAlign: "center" }}>
+                  No Deliveries Found
+                </Box>
+              ) : (
+                filteredDeliveries
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((ride) => (
+                    <TableRow hover key={ride._id}>
+                      <TableCell>{ride.driverId.name}</TableCell>
+                      <TableCell>{ride.userId.name}</TableCell>
+                      <TableCell>{ride.status}</TableCell>
+                      <TableCell>{ride.finalFare}</TableCell>
+                      <TableCell>{ride.paymentStatus}</TableCell>
+                      <TableCell align="center">
+                        <IconButton
+                          color="primary"
+                          onClick={() => handleViewOpen(ride)}
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                        {/* <IconButton
                         color="primary"
                         onClick={() => handleEditOpen(ride)}
                       >
                         <EditIcon />
                       </IconButton> */}
-                      
-                       {getInfoLoader ? (
-                                              <CircularProgress size={24} />
-                                            ) : (
-                                              <Button
-                                                color="secondary"
-                                                  onClick={()=>getRideDetailedInfo(ride._id)}
-                                              >
-                                                <DownloadIcon />
-                                              </Button>
-                                            )}
-                    </TableCell>
-                  </TableRow>
-                ))}
+
+                        {getInfoLoader ? (
+                          <CircularProgress size={24} />
+                        ) : (
+                          <Button
+                            color="secondary"
+                            onClick={() => getRideDetailedInfo(ride._id)}
+                          >
+                            <DownloadIcon />
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -363,13 +421,15 @@ const ManageDelivery = () => {
                     <TableCell>
                       <strong>Driver ID</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.driverId || "N/A"}</TableCell>
+                    <TableCell>
+                      {selectedride?.driverId.name || "N/A"}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
                       <strong>User ID</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.userId || "N/A"}</TableCell>
+                    <TableCell>{selectedride?.userId.name || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>

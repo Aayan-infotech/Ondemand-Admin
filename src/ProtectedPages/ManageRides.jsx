@@ -34,7 +34,7 @@ import { generatePDF } from "../utils/rideDetailsPdf";
 const columns = [
   { id: "Driver", label: " Driver", minWidth: 150, align: "center" },
   { id: "User", label: "user Name", minWidth: 100, align: "center" },
-  { id: "status", label: "status", minWidth: 150, align: "left" },
+  { id: "status", label: " Ride status", minWidth: 150, align: "left" },
   { id: "finalFare", label: "finalFare", minWidth: 150, align: "left" },
   {
     id: "paymentStatus",
@@ -52,6 +52,8 @@ const ManageRides = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
   const [getInfoLoader, setgetInfoLoader] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("");
 
   const handleEditOpen = (ride) => {
     setSelectedride(ride);
@@ -128,9 +130,55 @@ const ManageRides = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredRides = rides.filter((ride) => {
+    return (
+      (statusFilter ? ride.status === statusFilter : true) &&
+      (paymentStatusFilter ? ride.paymentStatus === paymentStatusFilter : true)
+    );
+  });
   return (
     <>
       <Box sx={{ fontSize: "24px", textAlign: "center" }}>Ride Management</Box>
+     <Box sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
+             {/* Status Filter */}
+             <TextField
+               select
+               label="Filter by Status"
+               value={statusFilter}
+               onChange={(e) => setStatusFilter(e.target.value)}
+               SelectProps={{ native: true }}
+             >
+               <option value=""></option>
+               <option value="completed">Completed</option>
+               <option value="canceled_by_system">Canceled by System</option>
+               <option value="pending">Pending</option>
+             </TextField>
+     
+             {/* Payment Status Filter */}
+             <TextField
+               select
+               label="Filter by Payment Status"
+               value={paymentStatusFilter}
+               onChange={(e) => setPaymentStatusFilter(e.target.value)}
+               SelectProps={{ native: true }}
+             >
+               <option value=""></option>
+               <option value="pending">Pending</option>
+               <option value="completed">Completed</option>
+             </TextField>
+     
+             {/* Clear Filters Button */}
+             <Button
+               variant="outlined"
+               onClick={() => {
+                 setStatusFilter("");
+                 setPaymentStatusFilter("");
+               }}
+             >
+               Clear Filters
+             </Button>
+           </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader>
@@ -144,7 +192,7 @@ const ManageRides = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rides
+              {filteredRides
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((ride) => (
                   <TableRow hover key={ride._id}>

@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast"; // ✅ Import react-hot-toast
 
-const Login = ({setIsAuthenticated}) => {
+const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -46,7 +47,6 @@ const Login = ({setIsAuthenticated}) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData)
     e.preventDefault();
     setError("");
 
@@ -54,14 +54,20 @@ const Login = ({setIsAuthenticated}) => {
 
     try {
       setLoading(true);
-      const response = await axios.post("http://44.196.64.110:3211/api/admin/login", formData);
+      const response = await axios.post(
+        "http://44.196.64.110:3211/api/admin/login",
+        formData
+      );
       localStorage.setItem("token", response.data.token);
-      setIsAuthenticated(true)
+      setIsAuthenticated(true);
+
+      toast.success("✅ Login Successful!"); // ✅ Success toast
       navigate("/");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Login failed. Please try again."
-      );
+      const errorMessage =
+        err.response?.data?.message || "❌ Login failed. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage); // ❌ Error toast
     } finally {
       setLoading(false);
     }
@@ -88,6 +94,20 @@ const Login = ({setIsAuthenticated}) => {
         bgcolor: "#cfe8fc",
       }}
     >
+      {/* ✅ Toast Notification Renderer */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            marginTop: "20px", // Adjust margin from bottom
+            padding: "2px",
+            borderRadius: "4px",
+          },
+          duration: 2000,
+        }}
+        // reverseOrder={false}
+      />
+
       <Box
         component="form"
         onSubmit={handleSubmit}
