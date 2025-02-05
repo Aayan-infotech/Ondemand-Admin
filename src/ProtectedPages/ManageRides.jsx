@@ -27,7 +27,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Download as DownloadIcon,
-  TwoWheeler as BikeIcon 
+  TwoWheeler as BikeIcon,
 } from "@mui/icons-material";
 import { generatePDF } from "../utils/rideDetailsPdf";
 
@@ -95,23 +95,24 @@ const ManageRides = () => {
       console.log("Error deleting ride", error);
     }
   };
- const getRideDetailedInfo = async (id) => {
-   setgetInfoLoader(true);
-   try {
-     const response = await axios.get(`http://44.196.64.110:3211/api/admin/details/${id}`);
-     const ride = response.data.data; // Extract ride data
- 
-     console.log(ride);
-     setgetInfoLoader(false);
- 
-     // Generate PDF once data is available
-     generatePDF(ride);
- 
-   } catch (error) {
-     setgetInfoLoader(false);
-     console.log("Error fetching ride details", error);
-   }
- };
+  const getRideDetailedInfo = async (id) => {
+    setgetInfoLoader(true);
+    try {
+      const response = await axios.get(
+        `http://44.196.64.110:3211/api/admin/details/${id}`
+      );
+      const ride = response.data.data; // Extract ride data
+
+      console.log(ride);
+      setgetInfoLoader(false);
+
+      // Generate PDF once data is available
+      generatePDF(ride);
+    } catch (error) {
+      setgetInfoLoader(false);
+      console.log("Error fetching ride details", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     setSelectedride({ ...selectedride, [e.target.name]: e.target.value });
@@ -140,45 +141,52 @@ const ManageRides = () => {
   return (
     <>
       <Box sx={{ fontSize: "24px", textAlign: "center" }}>Ride Management</Box>
-     <Box sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
-             {/* Status Filter */}
-             <TextField
-               select
-               label="Filter by Status"
-               value={statusFilter}
-               onChange={(e) => setStatusFilter(e.target.value)}
-               SelectProps={{ native: true }}
-             >
-               <option value=""></option>
-               <option value="completed">Completed</option>
-               <option value="canceled_by_system">Canceled by System</option>
-               <option value="pending">Pending</option>
-             </TextField>
-     
-             {/* Payment Status Filter */}
-             <TextField
-               select
-               label="Filter by Payment Status"
-               value={paymentStatusFilter}
-               onChange={(e) => setPaymentStatusFilter(e.target.value)}
-               SelectProps={{ native: true }}
-             >
-               <option value=""></option>
-               <option value="pending">Pending</option>
-               <option value="completed">Completed</option>
-             </TextField>
-     
-             {/* Clear Filters Button */}
-             <Button
-               variant="outlined"
-               onClick={() => {
-                 setStatusFilter("");
-                 setPaymentStatusFilter("");
-               }}
-             >
-               Clear Filters
-             </Button>
-           </Box>
+      <Box sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
+        {/* Status Filter */}
+        <TextField
+          select
+          label="Filter by Status"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          SelectProps={{ native: true }}
+        >
+          <option value=""></option>
+          <option value="pending">Pending</option>
+          <option value="accepted">Accepted</option>
+          <option value="arriving">Arriving</option>
+          <option value="arrived">Arrived</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="canceled_by_user">Cancelled by User</option>
+          <option value="canceled_by_driver">Cancelled by Driver</option>
+          <option value="canceled_by_system">Cancelled by System</option>
+        </TextField>
+
+        {/* Payment Status Filter */}
+        <TextField
+          select
+          label="Filter by Payment Status"
+          value={paymentStatusFilter}
+          onChange={(e) => setPaymentStatusFilter(e.target.value)}
+          SelectProps={{ native: true }}
+        >
+          <option value=""></option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="failed">Failed</option>
+        </TextField>
+
+        {/* Clear Filters Button */}
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setStatusFilter("");
+            setPaymentStatusFilter("");
+          }}
+        >
+          Clear Filters
+        </Button>
+      </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader>
@@ -196,8 +204,12 @@ const ManageRides = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((ride) => (
                   <TableRow hover key={ride._id}>
-                    <TableCell sx={{textAlign:"center"}}>{ride.driverId.name}</TableCell>
-                    <TableCell sx={{textAlign:"center"}}>{ride.userId.name}</TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      {ride.driverId.name}
+                    </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      {ride.userId.name}
+                    </TableCell>
                     <TableCell>{ride.status}</TableCell>
                     <TableCell>{ride.finalFare}</TableCell>
                     <TableCell>{ride.paymentStatus}</TableCell>
@@ -214,7 +226,7 @@ const ManageRides = () => {
                       >
                         <EditIcon />
                       </IconButton> */}
-                     
+
                       {/* <IconButton
                         color="error"
                         onClick={() => handleDelete(ride._id)}
@@ -226,9 +238,9 @@ const ManageRides = () => {
                       ) : (
                         <Button
                           color="secondary"
-                            onClick={()=>getRideDetailedInfo(ride._id)}
+                          onClick={() => getRideDetailedInfo(ride._id)}
                         >
-                          <DownloadIcon  />
+                          <DownloadIcon />
                         </Button>
                       )}
                     </TableCell>
@@ -419,7 +431,9 @@ const ManageRides = () => {
                     <TableCell>
                       <strong>Driver ID</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.driverId.name || "N/A"}</TableCell>
+                    <TableCell>
+                      {selectedride?.driverId.name || "N/A"}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
