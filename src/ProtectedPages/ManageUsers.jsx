@@ -149,7 +149,7 @@ const handleSearchChange = (e) => {
             }}
           >
             <Box sx={{ fontSize: "24px" }}>user Management</Box>
-            <TextField
+            {/* <TextField
               label="Search by Name"
               variant="outlined"
               size="small"
@@ -159,7 +159,7 @@ const handleSearchChange = (e) => {
               InputProps={{
                 endAdornment: <SearchIcon />,
               }}
-            />
+            /> */}
           </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
