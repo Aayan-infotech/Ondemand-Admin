@@ -45,7 +45,9 @@ const ManageContent = () => {
   const handleSaveTerms = async () => {
     try {
       console.log("Saving Terms & Conditions:", termsConditions);
-      // await axios.post("/api/saveContent", { termsConditions });
+      await axios.post("/api/saveContent", { termsConditions });
+      alert("Error saving terms & conditions");
+
     } catch (err) {
       console.error("Error saving terms & conditions:", err);
       alert("Error saving terms & conditions");

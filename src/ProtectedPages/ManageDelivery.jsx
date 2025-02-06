@@ -60,7 +60,7 @@ const ManageDelivery = () => {
   };
 
   const handleViewOpen = (ride) => {
-    // console.log(ride);
+    console.log(ride);
     setSelectedride(ride);
     setViewOpen(true);
   };
@@ -121,7 +121,8 @@ const ManageDelivery = () => {
       const res = await axios.get(
         "http://44.196.64.110:3211/api/deliveryRequest/getAll/deliveries"
       );
-      setDelivery(res.data.data.delivery);
+      console.log(res.data.data)
+      setDelivery(res.data.data.deliveries);
     } catch (error) {
       console.log(error);
     }
@@ -419,7 +420,7 @@ const ManageDelivery = () => {
                 <TableBody>
                   <TableRow>
                     <TableCell>
-                      <strong>Driver ID</strong>
+                      <strong>Driver Name</strong>
                     </TableCell>
                     <TableCell>
                       {selectedride?.driverId.name || "N/A"}
@@ -427,24 +428,22 @@ const ManageDelivery = () => {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <strong>User ID</strong>
+                      <strong>User Name</strong>
                     </TableCell>
                     <TableCell>{selectedride?.userId.name || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <strong>Vehicle ID</strong>
+                      <strong>Vehicle Model</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.vehicleId || "N/A"}</TableCell>
+                    <TableCell>{selectedride?.vehicleId.model || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
                       <strong>Pickup Location</strong>
                     </TableCell>
                     <TableCell>
-                      {selectedride?.pickupLocation
-                        ? `Lat: ${selectedride.pickupLocation.coordinates[1]}, Long: ${selectedride.pickupLocation.coordinates[0]}`
-                        : "N/A"}
+                      {selectedride?.pickupAddress|| "N/A"}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -452,9 +451,7 @@ const ManageDelivery = () => {
                       <strong>Dropoff Location</strong>
                     </TableCell>
                     <TableCell>
-                      {selectedride?.dropoffLocation
-                        ? `Lat: ${selectedride.dropoffLocation.coordinates[1]}, Long: ${selectedride.dropoffLocation.coordinates[0]}`
-                        : "N/A"}
+                      {selectedride?.dropoffAddress|| "N/A"}
                     </TableCell>
                   </TableRow>
                   <TableRow>

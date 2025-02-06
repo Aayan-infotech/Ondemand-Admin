@@ -55,6 +55,7 @@ export default function ManageDrivers() {
   const [viewAllRideModal, setViewAllRideModal] = useState({
     isOpen: false,
     rides: [],
+    type:""
   });
 
   const handleEditOpen = (driver) => {
@@ -142,6 +143,7 @@ export default function ManageDrivers() {
       console.log(res.data.data);
       setViewAllRideModal({
         isOpen: true,
+        type:"Rides",
         rides: res.data.data.completedRides || [], // Ensure it's an array
       });
     } catch (error) {
@@ -156,6 +158,7 @@ export default function ManageDrivers() {
       console.log(res.data.data?.completedDeliveries);
       setViewAllRideModal({
         isOpen: true,
+        type:"Deliveries",
         rides:
           res.data.data.completedRides ||
           res.data.data?.completedDeliveries ||
@@ -695,7 +698,8 @@ export default function ManageDrivers() {
 
       <RideModal
         open={viewAllRideModal.isOpen}
-        onClose={() => setViewAllRideModal({ isOpen: false, rides: [] })}
+        type={viewAllRideModal.type}
+        onClose={() => setViewAllRideModal({ isOpen: false, rides: [],type:"" })}
         rides={viewAllRideModal.rides}
       />
     </>

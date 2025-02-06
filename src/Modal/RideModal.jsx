@@ -1,9 +1,9 @@
 import { Modal, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
 
- const RideModal = ({ open, onClose, rides }) => (
+ const RideModal = ({ open, onClose, rides ,type="Rides"}) => (
     <Modal open={open} onClose={onClose}>
         <Box sx={{ width: "80%", margin: "5% auto", padding: 3, bgcolor: "white", borderRadius: 2 }}>
-            <Typography variant="h6">Showing All the Rides </Typography>
+            <Typography variant="h6">Showing All the {type} </Typography>
 
             {rides.length > 0 ? (
                 <Table>

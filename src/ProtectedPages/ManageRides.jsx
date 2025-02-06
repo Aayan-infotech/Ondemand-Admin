@@ -445,16 +445,14 @@ const ManageRides = () => {
                     <TableCell>
                       <strong>Vehicle ID</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.vehicleId || "N/A"}</TableCell>
+                    <TableCell>{selectedride?.vehicleId.model || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
                       <strong>Pickup Location</strong>
                     </TableCell>
                     <TableCell>
-                      {selectedride?.pickupLocation
-                        ? `Lat: ${selectedride.pickupLocation.coordinates[1]}, Long: ${selectedride.pickupLocation.coordinates[0]}`
-                        : "N/A"}
+                      {selectedride?.pickupAddress|| "N/A"}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -462,9 +460,7 @@ const ManageRides = () => {
                       <strong>Dropoff Location</strong>
                     </TableCell>
                     <TableCell>
-                      {selectedride?.dropoffLocation
-                        ? `Lat: ${selectedride.dropoffLocation.coordinates[1]}, Long: ${selectedride.dropoffLocation.coordinates[0]}`
-                        : "N/A"}
+                      {selectedride?.dropoffAddress|| "N/A"}
                     </TableCell>
                   </TableRow>
                   <TableRow>

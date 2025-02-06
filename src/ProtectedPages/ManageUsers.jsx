@@ -20,13 +20,14 @@ import {
   Box,
   Switch,
 } from "@mui/material";
-import {RideModal} from "../Modal/RideModal"
+import { RideModal } from "../Modal/RideModal";
 import {
   Visibility as VisibilityIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Download as DownloadIcon,
   TwoWheeler as BikeIcon,
+  ShoppingBag as BagIcon,
   Search as SearchIcon,
 } from "@mui/icons-material";
 
@@ -45,20 +46,19 @@ export default function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
   const [viewOpen, setViewOpen] = useState(false);
   const [viewAllRideModal, setViewAllRideModal] = useState({
     isOpen: false,
     rides: [],
-});
+  });
 
-const filteredUsers = users.filter((user) =>
-  user.name.toLowerCase().includes(searchQuery.toLowerCase())
-);
-const handleSearchChange = (e) => {
-  setSearchQuery(e.target.value);
-};
-
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   const handleEditOpen = (user) => {
     setSelectedUser(user);
@@ -91,11 +91,12 @@ const handleSearchChange = (e) => {
   const ViewAllRides = async (userId) => {
     try {
       const res = await axios.get(
-        `http://44.196.64.110:3211/api/rideRequest/completed/user/count/${userId}` );
-        console.log(res.data.data.completedRides)
-        setViewAllRideModal({
-          isOpen: true,
-          rides: res.data.data.completedRides || [], // Ensure it's an array
+        `http://44.196.64.110:3211/api/rideRequest/completed/user/count/${userId}`
+      );
+      console.log(res.data.data.completedRides);
+      setViewAllRideModal({
+        isOpen: true,
+        rides: res.data.data.completedRides || [], // Ensure it's an array
       });
     } catch (error) {
       console.log("Error getting data of user", error);
@@ -103,7 +104,6 @@ const handleSearchChange = (e) => {
   };
 
   const handleDelete = async (id) => {
-
     try {
       await axios.delete(`http://44.196.64.110:3211/api/user/${id}`);
       setUsers(users.filter((user) => user._id !== id));
@@ -115,9 +115,11 @@ const handleSearchChange = (e) => {
   const handleInputChange = (e) => {
     setSelectedUser({ ...selectedUser, [e.target.name]: e.target.value });
   };
-  const handleUserStatus =async (userId) => {
+  const handleUserStatus = async (userId) => {
     try {
-      await axios.put(`http://44.196.64.110:3211/api/user/updateStatus/${userId}`);
+      await axios.put(
+        `http://44.196.64.110:3211/api/user/updateStatus/${userId}`
+      );
       fetchData();
     } catch (error) {
       console.log("Error updating user status", error);
@@ -140,16 +142,16 @@ const handleSearchChange = (e) => {
 
   return (
     <>
-    <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2,
-            }}
-          >
-            <Box sx={{ fontSize: "24px" }}>user Management</Box>
-            <TextField
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Box sx={{ fontSize: "24px" }}>user Management</Box>
+        {/* <TextField
               label="Search by Name"
               variant="outlined"
               size="small"
@@ -159,8 +161,8 @@ const handleSearchChange = (e) => {
               InputProps={{
                 endAdornment: <SearchIcon />,
               }}
-            />
-          </Box>
+            /> */}
+      </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader>
@@ -190,7 +192,7 @@ const handleSearchChange = (e) => {
                     <TableCell>{user.mobileNumber}</TableCell>
                     <TableCell>
                       <Switch
-                        checked={user.userStatus==="Active"?true:false}
+                        checked={user.userStatus === "Active" ? true : false}
                         onChange={() => handleUserStatus(user._id)}
                       />
                     </TableCell>
@@ -218,6 +220,12 @@ const handleSearchChange = (e) => {
                         onClick={() => ViewAllRides(user._id)}
                       >
                         <BikeIcon />
+                      </IconButton>
+                      <IconButton
+                        color="primary"
+                        onClick={() => ViewAllDeliveryBydriver(driver._id)}
+                      >
+                        <BagIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -327,11 +335,10 @@ const handleSearchChange = (e) => {
         </DialogActions>
       </Dialog>
       <RideModal
-        open={viewAllRideModal.isOpen} 
-        onClose={() => setViewAllRideModal({ isOpen: false, rides: [] })} 
-        rides={viewAllRideModal.rides} 
+        open={viewAllRideModal.isOpen}
+        onClose={() => setViewAllRideModal({ isOpen: false, rides: [] })}
+        rides={viewAllRideModal.rides}
       />
-
     </>
   );
 }
