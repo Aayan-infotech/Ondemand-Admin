@@ -151,7 +151,7 @@ export default function ManageUsers() {
         }}
       >
         <Box sx={{ fontSize: "24px" }}>user Management</Box>
-        {/* <TextField
+        <TextField
               label="Search by Name"
               variant="outlined"
               size="small"
@@ -161,7 +161,7 @@ export default function ManageUsers() {
               InputProps={{
                 endAdornment: <SearchIcon />,
               }}
-            /> */}
+            />
       </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>

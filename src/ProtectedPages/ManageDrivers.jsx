@@ -196,7 +196,7 @@ export default function ManageDrivers() {
         }}
       >
         <Box sx={{ fontSize: "24px" }}>Driver Management</Box>
-        {/* <TextField
+        <TextField
           label="Search by Name"
           variant="outlined"
           size="small"
@@ -206,7 +206,7 @@ export default function ManageDrivers() {
           InputProps={{
             endAdornment: <SearchIcon />,
           }}
-        /> */}
+        />
       </Box>
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
