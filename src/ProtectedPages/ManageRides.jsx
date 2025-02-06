@@ -439,13 +439,13 @@ const ManageRides = () => {
                     <TableCell>
                       <strong>User</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.userId.name || "N/A"}</TableCell>
+                    <TableCell>{selectedride?.userId?.name || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
                       <strong>Vehicle</strong>
                     </TableCell>
-                    <TableCell>{selectedride?.vehicleId.model || "N/A"}</TableCell>
+                    <TableCell>{selectedride?.vehicleId?.model || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
@@ -468,22 +468,6 @@ const ManageRides = () => {
                       <strong>Final Fare</strong>
                     </TableCell>
                     <TableCell>{selectedride?.finalFare || "N/A"}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <strong>OTP</strong>
-                    </TableCell>
-                    <TableCell>{selectedride?.otp || "N/A"}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <strong>OTP Expiry Time</strong>
-                    </TableCell>
-                    <TableCell>
-                      {selectedride?.otpExpiryTime
-                        ? new Date(selectedride.otpExpiryTime).toLocaleString()
-                        : "N/A"}
-                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
