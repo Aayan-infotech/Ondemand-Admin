@@ -32,10 +32,10 @@ import {
 import { generatePDF } from "../utils/rideDetailsPdf";
 
 const columns = [
-  { id: "Driver", label: " Driver", minWidth: 150, align: "center" },
+  { id: "Driver", label: "Driver", minWidth: 150, align: "center" },
   { id: "User", label: "user Name", minWidth: 100, align: "center" },
   { id: "status", label: " Ride status", minWidth: 150, align: "left" },
-  { id: "finalFare", label: "finalFare", minWidth: 150, align: "left" },
+  { id: "finalFare", label: "Final Fare", minWidth: 150, align: "left" },
   {
     id: "paymentStatus",
     label: "Payment Status",
@@ -429,7 +429,7 @@ const ManageRides = () => {
                 <TableBody>
                   <TableRow>
                     <TableCell>
-                      <strong>Driver ID</strong>
+                      <strong>Driver </strong>
                     </TableCell>
                     <TableCell>
                       {selectedride?.driverId.name || "N/A"}
@@ -437,13 +437,13 @@ const ManageRides = () => {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <strong>User ID</strong>
+                      <strong>User</strong>
                     </TableCell>
                     <TableCell>{selectedride?.userId.name || "N/A"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <strong>Vehicle ID</strong>
+                      <strong>Vehicle</strong>
                     </TableCell>
                     <TableCell>{selectedride?.vehicleId.model || "N/A"}</TableCell>
                   </TableRow>
