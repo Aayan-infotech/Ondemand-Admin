@@ -35,7 +35,7 @@ const ManageContent = () => {
   const handleSavePrivacy = async () => {
     try {
       console.log("Saving Privacy Policy:", privacyPolicy);
-      // await axios.post("/api/saveContent", { privacyPolicy });
+      await axios.post("http://44.196.64.110:3211/api/contents/update-terms", { content:privacyPolicy });
     } catch (err) {
       console.error("Error saving privacy policy:", err);
       alert("Error saving privacy policy");
