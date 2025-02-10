@@ -97,7 +97,7 @@ console.log(termsConditions,privacyPolicy)
       {/* Terms & Conditions Section */}
       {!isDeletedTerms && (
         <>
-          <div style={{ marginTop: "30px", marginBottom: "20px" }}>
+          <div style={{ marginTop: "60px", marginBottom: "20px" }}>
             <Typography fontWeight="bold">Terms & Conditions</Typography>
             {!isEditingTerms && (
               <IconButton onClick={handleEditTerms} color="primary">
