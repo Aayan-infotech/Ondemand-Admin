@@ -150,9 +150,15 @@ const ManageDelivery = () => {
           SelectProps={{ native: true }}
         >
           <option value=""></option>
+          <option value="pending">Pending</option>
+          <option value="accepted">Accepted</option>
+          <option value="arriving">Arriving</option>
+          <option value="arrived">Arrived</option>
+          <option value="in_progress">In Progress</option>
           <option value="completed">Completed</option>
-          <option value="canceled_by_system">Canceled by System</option>
-          <option value="canceled_by_user">Canceled by User</option>
+          <option value="canceled_by_user">Cancelled by User</option>
+          <option value="canceled_by_driver">Cancelled by Driver</option>
+          <option value="canceled_by_system">Cancelled by System</option>
         </TextField>
 
         {/* Payment Status Filter */}
