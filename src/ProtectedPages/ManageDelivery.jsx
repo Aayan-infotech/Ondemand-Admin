@@ -152,6 +152,7 @@ const ManageDelivery = () => {
           <option value=""></option>
           <option value="completed">Completed</option>
           <option value="canceled_by_system">Canceled by System</option>
+          <option value="canceled_by_user">Canceled by User</option>
         </TextField>
 
         {/* Payment Status Filter */}
