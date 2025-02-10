@@ -207,12 +207,12 @@ const ManageDelivery = () => {
                 filteredDeliveries
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   ?.map((ride) => (
-                    <TableRow hover key={ride._id}>
-                      <TableCell>{ride.driverId.name}</TableCell>
-                      <TableCell sx={{textAlign:"center"}}>{ride.userId.name}</TableCell>
-                      <TableCell>{ride.status}</TableCell>
-                      <TableCell>{ride.finalFare}</TableCell>
-                      <TableCell sx={{textAlign:"center"}}>{ride.paymentStatus}</TableCell>
+                    <TableRow hover key={ride?._id}>
+                      <TableCell>{ride?.driverId?.name||"N/A"}</TableCell>
+                      <TableCell sx={{textAlign:"center"}}>{ride?.userId?.name||"N/A"}</TableCell>
+                      <TableCell>{ride?.status}</TableCell>
+                      <TableCell>{ride?.finalFare}</TableCell>
+                      <TableCell sx={{textAlign:"center"}}>{ride?.paymentStatus}</TableCell>
                       <TableCell align="center">
                         <IconButton
                           color="primary"

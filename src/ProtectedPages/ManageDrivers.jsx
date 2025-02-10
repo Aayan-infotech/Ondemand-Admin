@@ -170,6 +170,8 @@ export default function ManageDrivers() {
   const fetchData = async () => {
     try {
       const res = await axios.get("http://44.196.64.110:3211/api/driver/");
+      setdrivers(res?.data?.data)
+      console.log(res?.data?.data)
     } catch (error) {
       alert(error);
     }

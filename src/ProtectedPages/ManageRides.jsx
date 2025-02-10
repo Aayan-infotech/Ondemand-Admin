@@ -120,6 +120,7 @@ const ManageRides = () => {
       const res = await axios.get(
         "http://44.196.64.110:3211/api/rideRequest/getAll/rides"
       );
+      console.log(res.data.data.rides)
       setrides(res.data.data.rides);
     } catch (error) {
       alert(error);
