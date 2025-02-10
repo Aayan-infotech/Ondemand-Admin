@@ -30,7 +30,7 @@ import { Modal, Box, Typography, Table, TableHead, TableRow, TableCell, TableBod
                 </Table>
             ) : (
                 <Typography variant="body1" sx={{ mt: 2, textAlign: "center" }}>
-                    No rides found for this user.
+                    No {type} found for this user.
                 </Typography>
             )}
 

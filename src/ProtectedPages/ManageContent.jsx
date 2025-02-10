@@ -48,12 +48,14 @@ const ManageContent = () => {
       alert("Error saving terms & conditions");
     }
   };
-
+useEffect(()=>{
+console.log(termsConditions,privacyPolicy)
+},[termsConditions,privacyPolicy])
 
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center" }}>Static Content Management</h1>
+      <h2>Manage Content</h2>
 
       {/* Privacy Policy Section */}
       {!isDeletedPrivacy && (

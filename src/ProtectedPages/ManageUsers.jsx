@@ -50,6 +50,7 @@ export default function ManageUsers() {
   const [viewOpen, setViewOpen] = useState(false);
   const [viewAllRideModal, setViewAllRideModal] = useState({
     isOpen: false,
+    type:"Rides",
     rides: [],
   });
 
@@ -108,6 +109,7 @@ export default function ManageUsers() {
       );
       setViewAllRideModal({
         isOpen: true,
+        type:"Deliveries",
         rides: res.data.data.completedDeliveriesCount|| [], // Ensure it's an array
       });
     } catch (error) {
@@ -161,7 +163,7 @@ export default function ManageUsers() {
           mb: 2,
         }}
       >
-        <Box sx={{ fontSize: "24px" }}>user Management</Box>
+        <Box sx={{ fontSize: "24px" }}>Manage Users</Box>
         <TextField
               label="Search by Name"
               variant="outlined"
@@ -347,6 +349,7 @@ export default function ManageUsers() {
       </Dialog>
       <RideModal
         open={viewAllRideModal.isOpen}
+        type={viewAllRideModal.type}
         onClose={() => setViewAllRideModal({ isOpen: false, rides: [] })}
         rides={viewAllRideModal.rides}
       />

@@ -137,8 +137,8 @@ const ManageDelivery = () => {
 
   return (
     <>
-      <Box sx={{ fontSize: "24px", textAlign: "center" }}>
-        Delivery Management
+      <Box sx={{ fontSize: "24px",  }}>
+        Manage  Delivery
       </Box>
       <Box sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
         {/* Status Filter */}

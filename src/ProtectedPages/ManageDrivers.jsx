@@ -188,7 +188,7 @@ export default function ManageDrivers() {
           mb: 2,
         }}
       >
-        <Box sx={{ fontSize: "24px" }}>Driver Management</Box>
+        <Box sx={{ fontSize: "24px" }}> Manage Drivers</Box>
         <TextField
           label="Search by Name"
           variant="outlined"

@@ -137,7 +137,7 @@ const ManageRides = () => {
   });
   return (
     <>
-      <Box sx={{ fontSize: "24px", textAlign: "center" }}>Ride Management</Box>
+      <Box sx={{ fontSize: "24px",  }}> Manage Rides</Box>
       <Box sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
         {/* Status Filter */}
         <TextField
