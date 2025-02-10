@@ -60,7 +60,6 @@ const ManageDelivery = () => {
   };
 
   const handleViewOpen = (ride) => {
-    console.log(ride);
     setSelectedride(ride);
     setViewOpen(true);
   };
@@ -78,14 +77,13 @@ const ManageDelivery = () => {
       );
       const ride = response.data.data; // Extract ride data
 
-      console.log(ride);
       setgetInfoLoader(false);
 
       // Generate PDF once data is available
       deliveryDetailsPdf(ride);
     } catch (error) {
       setgetInfoLoader(false);
-      console.log("Error fetching ride details", error);
+      alert("Error fetching ride details", error);
     }
   };
 
@@ -98,7 +96,7 @@ const ManageDelivery = () => {
       fetchData();
       handleClose();
     } catch (error) {
-      console.log("Error updating ride", error);
+      alert("Error updating ride", error);
     }
   };
 
@@ -109,7 +107,7 @@ const ManageDelivery = () => {
   //     await axios.delete(`http://44.196.64.110:3211/api/ride/${id}`);
   //     setDelivery(delivery.filter((ride) => ride._id !== id));
   //   } catch (error) {
-  //     console.log("Error deleting ride", error);
+  //     alert("Error deleting ride", error);
   //   }
   // };
 
@@ -121,10 +119,9 @@ const ManageDelivery = () => {
       const res = await axios.get(
         "http://44.196.64.110:3211/api/deliveryRequest/getAll/deliveries"
       );
-      console.log(res.data.data)
       setDelivery(res.data.data.deliveries);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
   useEffect(() => {

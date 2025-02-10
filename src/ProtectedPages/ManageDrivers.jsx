@@ -64,7 +64,7 @@ export default function ManageDrivers() {
   };
 
   const handleViewOpen = (driver) => {
-    // console.log(driver);
+    // alert(driver);
     setSelecteddriver(driver);
     setViewOpen(true);
   };
@@ -97,7 +97,8 @@ export default function ManageDrivers() {
       fetchData();
       handleClose();
     } catch (error) {
-      console.log("Error updating driver", error);
+      
+      alert("Error updating driver", error);
     }
   };
 
@@ -108,28 +109,24 @@ export default function ManageDrivers() {
       await axios.delete(`http://44.196.64.110:3211/api/driver/${id}`);
       setdrivers(drivers.filter((driver) => driver._id !== id));
     } catch (error) {
-      console.log("Error deleting driver", error);
+      alert("Error deleting driver", error);
     }
   };
   const handleDriverVerification = async (driverId) => {
-    console.log(driverId);
     try {
       const res = await axios.put(
         `http://44.196.64.110:3211/api/driver/verify/${driverId}`
       );
-      console.log(res);
       await fetchData();
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
   const handleDriverStatus = async (driverId) => {
     try {
-      console.log(driverId);
       const res = await axios.put(
         `http://44.196.64.110:3211/api/driver/updateStatus/${driverId}`
       );
-      console.log(res);
       await fetchData();
     } catch (error) {
       console.error("Error updating driver status:", error);
@@ -140,14 +137,13 @@ export default function ManageDrivers() {
       const res = await axios.get(
         `http://44.196.64.110:3211/api/rideRequest/completed/driver/count/${driverId}`
       );
-      console.log(res.data.data);
       setViewAllRideModal({
         isOpen: true,
         type:"Rides",
         rides: res.data.data.completedRides || [], // Ensure it's an array
       });
     } catch (error) {
-      console.log("Error getting data of user", error);
+      alert("Error getting data of user", error);
     }
   };
   const ViewAllDeliveryBydriver = async (driverId) => {
@@ -155,7 +151,6 @@ export default function ManageDrivers() {
       const res = await axios.get(
         `http://44.196.64.110:3211/api/deliveryRequest/completed/deliveries/${driverId}/count`
       );
-      console.log(res.data.data?.completedDeliveries);
       setViewAllRideModal({
         isOpen: true,
         type:"Deliveries",
@@ -165,7 +160,7 @@ export default function ManageDrivers() {
           [], // Ensure it's an array
       });
     } catch (error) {
-      console.log("Error getting data of user", error);
+      alert("Error getting data of user", error);
     }
   };
 
@@ -175,10 +170,8 @@ export default function ManageDrivers() {
   const fetchData = async () => {
     try {
       const res = await axios.get("http://44.196.64.110:3211/api/driver/");
-      // console.log(res.data.data);
-      setdrivers(res?.data.data);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
   useEffect(() => {

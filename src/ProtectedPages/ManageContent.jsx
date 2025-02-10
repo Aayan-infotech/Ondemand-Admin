@@ -34,30 +34,22 @@ const ManageContent = () => {
 
   const handleSavePrivacy = async () => {
     try {
-      console.log("Saving Privacy Policy:", privacyPolicy);
-      await axios.post("http://44.196.64.110:3211/api/contents/update-terms", { content:privacyPolicy });
+      await axios.post("http://44.196.64.110:3211/api/policies/update-policy", { content:privacyPolicy });
     } catch (err) {
       console.error("Error saving privacy policy:", err);
-      alert("Error saving privacy policy");
     }
   };
 
   const handleSaveTerms = async () => {
     try {
-      console.log("Saving Terms & Conditions:", termsConditions);
-      await axios.post("/api/saveContent", { termsConditions });
-      alert("Error saving terms & conditions");
+      await axios.post("http://44.196.64.110:3211/api/contents/update-terms", { content:termsConditions });
 
     } catch (err) {
-      console.error("Error saving terms & conditions:", err);
       alert("Error saving terms & conditions");
     }
   };
 
-  useEffect(() => {
-    console.log("Privacy Policy:", privacyPolicy);
-    console.log("Terms & Conditions:", termsConditions);
-  }, [privacyPolicy, termsConditions]);
+
 
   return (
     <div style={{ padding: "20px" }}>

@@ -43,7 +43,7 @@ Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
-    console.log("User logged out");
+    alert("User logged out");
     handleMenuClose();
   };
 

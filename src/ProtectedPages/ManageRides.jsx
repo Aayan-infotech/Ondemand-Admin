@@ -61,7 +61,6 @@ const ManageRides = () => {
   };
 
   const handleViewOpen = (ride) => {
-    // console.log(ride);
     setSelectedride(ride);
     setViewOpen(true);
   };
@@ -81,7 +80,7 @@ const ManageRides = () => {
       fetchData();
       handleClose();
     } catch (error) {
-      console.log("Error updating ride", error);
+      alert("Error updating ride", error);
     }
   };
 
@@ -92,7 +91,7 @@ const ManageRides = () => {
       await axios.delete(`http://44.196.64.110:3211/api/ride/${id}`);
       setrides(rides.filter((ride) => ride._id !== id));
     } catch (error) {
-      console.log("Error deleting ride", error);
+      alert("Error deleting ride", error);
     }
   };
   const getRideDetailedInfo = async (id) => {
@@ -103,14 +102,13 @@ const ManageRides = () => {
       );
       const ride = response.data.data; // Extract ride data
 
-      console.log(ride);
       setgetInfoLoader(false);
 
       // Generate PDF once data is available
       generatePDF(ride);
     } catch (error) {
       setgetInfoLoader(false);
-      console.log("Error fetching ride details", error);
+      alert("Error fetching ride details", error);
     }
   };
 
@@ -122,10 +120,9 @@ const ManageRides = () => {
       const res = await axios.get(
         "http://44.196.64.110:3211/api/rideRequest/getAll/rides"
       );
-      console.log(res.data.data);
       setrides(res.data.data.rides);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
   useEffect(() => {
@@ -205,10 +202,10 @@ const ManageRides = () => {
                 ?.map((ride) => (
                   <TableRow hover key={ride._id}>
                     <TableCell sx={{ textAlign: "center" }}>
-                      {ride.driverId.name}
+                      {ride?.driverId?.name||"N/A"}
                     </TableCell>
                     <TableCell sx={{ textAlign: "center" }}>
-                      {ride.userId.name}
+                      {ride?.userId?.name}
                     </TableCell>
                     <TableCell>{ride.status}</TableCell>
                     <TableCell>{ride.finalFare}</TableCell>

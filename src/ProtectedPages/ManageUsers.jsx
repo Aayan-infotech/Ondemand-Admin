@@ -85,7 +85,7 @@ export default function ManageUsers() {
       fetchData();
       handleClose();
     } catch (error) {
-      console.log("Error updating user", error);
+      alert("Error updating user", error);
     }
   };
   const ViewAllRides = async (userId) => {
@@ -93,13 +93,25 @@ export default function ManageUsers() {
       const res = await axios.get(
         `http://44.196.64.110:3211/api/rideRequest/completed/user/count/${userId}`
       );
-      console.log(res.data.data.completedRides);
       setViewAllRideModal({
         isOpen: true,
         rides: res.data.data.completedRides || [], // Ensure it's an array
       });
     } catch (error) {
-      console.log("Error getting data of user", error);
+      alert("Error getting data of user", error);
+    }
+  };
+  const ViewAllDeliveryByUserID = async (userId) => {
+    try {
+      const res = await axios.get(
+        `http://44.196.64.110:3211/api/deliveryRequest/completed/deliveries/count/${userId}`
+      );
+      setViewAllRideModal({
+        isOpen: true,
+        rides: res.data.data.completedDeliveriesCount|| [], // Ensure it's an array
+      });
+    } catch (error) {
+      alert("Error getting data of user", error);
     }
   };
 
@@ -108,7 +120,7 @@ export default function ManageUsers() {
       await axios.delete(`http://44.196.64.110:3211/api/user/${id}`);
       setUsers(users.filter((user) => user._id !== id));
     } catch (error) {
-      console.log("Error deleting user", error);
+      alert("Error deleting user", error);
     }
   };
 
@@ -122,7 +134,7 @@ export default function ManageUsers() {
       );
       fetchData();
     } catch (error) {
-      console.log("Error updating user status", error);
+      alert("Error updating user status", error);
     }
   };
 
@@ -134,9 +146,8 @@ export default function ManageUsers() {
     try {
       const res = await axios.get("http://44.196.64.110:3211/api/user");
       setUsers(res?.data.data);
-      console.log(res?.data.data);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
@@ -223,7 +234,7 @@ export default function ManageUsers() {
                       </IconButton>
                       <IconButton
                         color="primary"
-                        onClick={() => ViewAllDeliveryBydriver(driver._id)}
+                        onClick={() => ViewAllDeliveryByUserID(user._id)}
                       >
                         <BagIcon />
                       </IconButton>
